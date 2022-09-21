@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Minesweeper - Sprint 1</title>
+</head>
+<body onload="onInitGame()">
+
+<div class="container">
+    <h1>M I N E 💣 S W E E P E R</h1>
+    <button class="norm-level" onclick="changeGameLevel(8)">Normal</button>
+    <button class="med-level" onclick="changeGameLevel(9)">Medium</button>
+    <button class="high-level" onclick="changeGameLevel(10)">High</button><br>
+    <button class="emoji" onclick="resetGame()">🤪</button>
+    <div class="timer">Time passed: <span>0</span> <span2>seconds</span2></div>
+    <table id="table">
+        <tbody class="board"></tbody>
+    </table>
+    <div class="lives-count">Lives left: <span>❤️❤️❤️</span></div>
+    <div class="shown-count">Shown Count: <span>0</span> </div>
+    <div class="marked-count">Marked count: <span>0</span></div>
+</div>
+<div class="modal"></div>
+
+</body>
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+</html>
