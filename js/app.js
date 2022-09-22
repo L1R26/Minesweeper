@@ -35,6 +35,8 @@ function onInitGame() {
     // Creating the board on client screen
     renderBoard(gBoard)
     gGame.isOn = true
+    var elEmoji = document.querySelector('.emoji')
+    elEmoji.innerHTML = '🤪'
     openModal('Game is running...')
     gIntervalId = setInterval(startTimer, 1000);
 
@@ -53,6 +55,7 @@ function cellClicked(cell, i, j) {
     //Updating DOM
     if (minesNegsCount > 0) cell.innerHTML = minesNegsCount;
     cell.classList.remove('hidden');
+    if (!minesNegsCount) expandShown(i, j);
     if (checkWinning()) return onGameOver(true);
 }
 
@@ -165,18 +168,22 @@ function checkWinning() {
 }
 
 function onGameOver(isWin = false) {
+    var elEmoji = document.querySelector('.emoji')
+    
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
             var currCell = gBoard[i][j];
-
+            //updating dom
+            elEmoji.innerHTML = '😥'
             if (currCell.isMine) {
                 var elCell = document.querySelector(`.cell-${i}-${j}`);
 
                 if (!isWin) {
                     elCell.classList.remove('hidden');
                     elCell.innerHTML = MINE_IMG
-                    openModal('G A M E -I S- O V  E R')
+                    openModal('G A M E O V  E R')
                 } else {
+                    elEmoji.innerHTML = '😄'
                     elCell.innerHTML = FLAG_IMG
                     openModal('Congratulations! You won')
                 }
@@ -186,3 +193,27 @@ function onGameOver(isWin = false) {
     }
     gGame.isOn = false;
 }
+
+
+function expandShown(row, col) {
+    for (var i = row - 1; i <= row + 1; i++) {
+      if (i < 0 || i > gBoard.length - 1) continue;
+      for (var j = col - 1; j <= col + 1; j++) {
+        if (j < 0 || j > gBoard[i].length - 1) continue;
+        if (i === row && j === col) continue;
+  
+        var minesNegsCount = setMinesNegsCount(gBoard, i, j);
+  
+        if (!gBoard[i][j].isMine && !gBoard[i][j].isShown) {
+          var elCell = document.querySelector(`.cell-${i}-${j}`);
+          elCell.classList.remove('hidden');
+          elCell.style.color = minesNegsCount = 'black';
+          if (minesNegsCount > 0) elCell.innerHTML = minesNegsCount;
+          gBoard[i][j].isShown = true;
+          gGame.shownCount++
+          if (!minesNegsCount) expandShown(i, j);
+        }
+      }
+    }
+  }
+  
