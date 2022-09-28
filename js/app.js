@@ -28,6 +28,9 @@ var gGame = {
 }
 
 function onInitGame() {
+    var elshownCount = document.querySelector('.shown-count span')
+    var elMarkedCount = document.querySelector('.marked-count span')
+    var elEmoji = document.querySelector('.emoji')
     // Creating a board according 'gLevel' values.
     gBoard = createMat(gLevel.SIZE, gLevel.SIZE)
     // Showing up the timer
@@ -35,8 +38,9 @@ function onInitGame() {
     // Creating the board on client screen
     renderBoard(gBoard)
     gGame.isOn = true
-    var elEmoji = document.querySelector('.emoji')
     elEmoji.innerHTML = '🤪'
+    elMarkedCount.innerText = gGame.markedCount
+    elshownCount.innerText = gGame.shownCount
     openModal('Game is running...')
     gIntervalId = setInterval(startTimer, 1000);
 
@@ -77,6 +81,8 @@ function cellMark(cell, event, i, j) {
         gGame.markedCount--
 
     }
+    var elMarkedCount = document.querySelector('.marked-count span')
+    elMarkedCount.innerText = gGame.markedCount
     if (checkWinning()) return onGameOver(true);
 }
 
@@ -206,11 +212,14 @@ function expandShown(row, col) {
   
         if (!gBoard[i][j].isMine && !gBoard[i][j].isShown) {
           var elCell = document.querySelector(`.cell-${i}-${j}`);
+          var elshownCount = document.querySelector('.shown-count span')
           elCell.classList.remove('hidden');
           elCell.style.color = minesNegsCount = 'black';
           if (minesNegsCount > 0) elCell.innerHTML = minesNegsCount;
           gBoard[i][j].isShown = true;
           gGame.shownCount++
+          elshownCount.innerText = gGame.shownCount
+
           if (!minesNegsCount) expandShown(i, j);
         }
       }
